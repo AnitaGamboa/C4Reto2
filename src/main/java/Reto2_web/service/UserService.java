@@ -57,7 +57,7 @@ public class UserService {
 
         if (user.getId() != null) {
             Optional<User> userDb = userRepository.getUser(user.getId());
-            if (!userDb.isPresent()) {
+            if (userDb.isPresent()) {
                 if (user.getIdentification() != null) {
                     userDb.get().setIdentification(user.getIdentification());
                 }
@@ -80,7 +80,7 @@ public class UserService {
                     userDb.get().setZone(user.getZone());
                 }
 
-                userRepository.update(userDb.get());
+                userRepository.create(userDb.get());
                 return userDb.get();
             } else {
                 return user;

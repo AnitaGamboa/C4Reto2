@@ -38,7 +38,7 @@ public class GadgetService {
 
         if (accesory.getId() != null) {
             Optional<Gadget> accesoryDb = GadgetRepository.getMercader(accesory.getId());
-            if (!accesoryDb.isPresent()) {
+            if (accesoryDb.isPresent()) {
                 
                 if (accesory.getBrand()!= null) {
                     accesoryDb.get().setBrand(accesory.getBrand());
