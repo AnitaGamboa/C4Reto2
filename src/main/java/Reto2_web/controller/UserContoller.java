@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("api/user")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 public class UserContoller {
     @Autowired
     private UserService userService;
@@ -37,10 +38,16 @@ public class UserContoller {
     public List<User> getAll() {
         return userService.getAll();
     }
-    @PostMapping("/{id}")
-    public Optional<User> getUser(@PathVariable("id") int id) {
-        return userService.getUser(id);
+     @GetMapping("/{id}")
+    public User getUserById(@PathVariable("id") int id) {
+        return userService.getUserById(id);
     }
+    /**
+    @PutMapping("/{id}")
+    public Optional<User> getUser(@PathVariable("id") Integer id) {
+        return userService.update(id);
+    }
+    */
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody User user) {
@@ -54,8 +61,8 @@ public class UserContoller {
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public boolean delete(@PathVariable("id") int id) {
-        return userService.delete(id);
+    public void delete(@PathVariable("id") Integer id) {
+        userService.delete(id);
     }
     @GetMapping("/{email}/{password}")
     public User authenticateUser(@PathVariable("email") String email, @PathVariable("password") String password) {

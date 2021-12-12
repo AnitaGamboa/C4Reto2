@@ -37,7 +37,7 @@ public class UserRepository {
      * @return 
  * @
  */
-    public Optional<User> getUser(int id) {
+    public Optional<User> getUserById(int id) {
         return userCrudInterface.findById(id);
     }
  /**

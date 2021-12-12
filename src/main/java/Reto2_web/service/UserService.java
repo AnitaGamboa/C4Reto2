@@ -26,15 +26,18 @@ public class UserService {
         return userRepository.getAll();
     }
 
-    public Optional<User> getUser(int id) {
-        return userRepository.getUser(id);
+   public User getUserById(int id){
+        Optional<User> userOpt = userRepository.getUserById(id);
+        if(userOpt.isPresent()){
+            return userOpt.get();
+        }
+        return null;
     }
-
     public User create(User user) {
         if (user.getId() == null) {
             return userRepository.create(user);
         } else {
-            Optional<User> e = userRepository.getUser(user.getId());
+            Optional<User> e = userRepository.getUserById(user.getId());
             if (e.isPresent()) {
                   return user;
                     } else {
@@ -56,7 +59,7 @@ public class UserService {
     public User update(User user) {
 
         if (user.getId() != null) {
-            Optional<User> userDb = userRepository.getUser(user.getId());
+            Optional<User> userDb = userRepository.getUserById(user.getId());
             if (userDb.isPresent()) {
                 if (user.getIdentification() != null) {
                     userDb.get().setIdentification(user.getIdentification());
@@ -79,6 +82,9 @@ public class UserService {
                 if (user.getZone() != null) {
                     userDb.get().setZone(user.getZone());
                 }
+                 if (user.getType() != null) {
+                    userDb.get().setType(user.getType());
+                }
 
                 userRepository.create(userDb.get());
                 return userDb.get();
@@ -90,14 +96,22 @@ public class UserService {
         }
     }
 
-    public boolean delete(int userId) {
-        Boolean aBoolean = getUser(userId).map(user -> {
+    
+     public void delete(Integer id) {
+        Optional<User> userOpt = userRepository.getUserById(id);
+        if (userOpt.isPresent()) {
+            userRepository.delete(userOpt.get());
+        }
+    }
+    /**
+    public boolean delete(Integer userId) {
+        Boolean aBoolean = getUserById(userId).map(user -> {
             userRepository.delete(user);
             return true;
         }).orElse(false);
         return aBoolean;
     }
-
+**/
     public boolean emailExists(String email) {
         return userRepository.emailExists(email);
     }
